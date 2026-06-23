@@ -15,10 +15,11 @@ app = FastAPI(
     version="1.0.0",
 )
 
-# Allow local dev + any Vercel deployment domain
+# Allow local dev, Vercel frontend, and Render previews
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )

@@ -1,7 +1,9 @@
-// Thin fetch wrapper around the FastAPI backend (proxied via /api in dev).
+// In dev, Vite proxies /api → localhost:8000.
+// In production, VITE_API_URL points to the deployed backend (e.g. Render).
+const BASE = import.meta.env.VITE_API_URL ?? "";
 
 async function request(path, options = {}) {
-  const res = await fetch(path, {
+  const res = await fetch(`${BASE}${path}`, {
     headers: { "Content-Type": "application/json" },
     ...options,
   });
