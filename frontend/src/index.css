@@ -10,6 +10,10 @@ body,
 
 body {
   @apply bg-slate-50 text-slate-800 antialiased;
+  background-image:
+    radial-gradient(70rem 40rem at 110% -10%, rgba(59, 130, 246, 0.06), transparent 60%),
+    radial-gradient(60rem 40rem at -10% 110%, rgba(15, 34, 64, 0.05), transparent 55%);
+  background-attachment: fixed;
 }
 
 /* thin scrollbars for the scrollable panels */
@@ -19,8 +23,34 @@ body {
 }
 .scroll-area::-webkit-scrollbar {
   width: 8px;
+  height: 8px;
 }
 .scroll-area::-webkit-scrollbar-thumb {
   background-color: #cbd5e1;
   border-radius: 9999px;
+}
+
+/* subtle entrance for drawers / modals */
+@keyframes slide-in-right {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+.animate-slide-in-right {
+  animation: slide-in-right 0.22s ease-out;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.animate-fade-in {
+  animation: fade-in 0.18s ease-out;
 }

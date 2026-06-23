@@ -11,6 +11,7 @@ import DraftReplyPanel from "./components/drafts/DraftReplyPanel.jsx";
 import ChatbotTab from "./components/chatbot/ChatbotTab.jsx";
 import BinSection from "./components/bin/BinSection.jsx";
 import NotificationToast from "./components/notifications/NotificationToast.jsx";
+import TenantCaseDrawer from "./components/tenant/TenantCaseDrawer.jsx";
 
 const SECTIONS = {
   dashboard: Dashboard,
@@ -37,6 +38,7 @@ export default function App() {
           <Active />
         </main>
       </div>
+      <TenantCaseDrawer />
       <NotificationToast />
     </div>
   );

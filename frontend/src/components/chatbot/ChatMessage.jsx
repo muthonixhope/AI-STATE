@@ -1,6 +1,8 @@
-import { FileText } from "lucide-react";
+import { FileText, UserSquare } from "lucide-react";
+import { useApp } from "../../context/AppContext.jsx";
 
 export default function ChatMessage({ msg }) {
+  const { openTenantCase } = useApp();
   const isUser = msg.role === "user";
 
   if (isUser) {
@@ -42,6 +44,14 @@ export default function ChatMessage({ msg }) {
                 <FileText className="h-3 w-3" />
                 {msg.source}
               </span>
+            )}
+            {msg.tenantId && (
+              <button
+                onClick={() => openTenantCase(msg.tenantId)}
+                className="inline-flex items-center gap-1 rounded-full bg-brand-50 px-2.5 py-0.5 text-[11px] font-semibold text-brand-700 hover:bg-brand-100"
+              >
+                <UserSquare className="h-3 w-3" /> Open tenant case
+              </button>
             )}
           </div>
         )}
