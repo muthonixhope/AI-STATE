@@ -118,6 +118,22 @@ export function AppProvider({ children }) {
     setTasks((prev) => prev.map((t) => (t.id === id ? { ...t, status } : t)));
   }, []);
 
+  const moveTask = useCallback((taskId, newDate, newTime) => {
+    setTasks((prev) =>
+      prev.map((t) =>
+        t.id === taskId
+          ? { ...t, date: newDate, time: newTime, manuallyScheduled: true, source: "manual" }
+          : t
+      )
+    );
+    const dateLabel = new Date(newDate + "T00:00:00").toLocaleDateString(undefined, {
+      weekday: "long",
+      month: "long",
+      day: "numeric",
+    });
+    addNotification({ message: `Task moved to ${dateLabel} at ${newTime}.` });
+  }, [addNotification]);
+
   // ── notes pad ─────────────────────────────────────────────
   const addNote = useCallback((note) => {
     const id = `n${Date.now()}`;
@@ -270,6 +286,7 @@ export function AppProvider({ children }) {
     updateTask,
     deleteTask,
     setTaskStatus,
+    moveTask,
     addNote,
     toggleNote,
     deleteNote,
