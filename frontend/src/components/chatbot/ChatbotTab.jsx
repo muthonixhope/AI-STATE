@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Send, Bot } from "lucide-react";
 import { askChatbot, SUGGESTION_PROMPTS } from "../../chatbot/mockChatEngine.js";
+import { findTenantByFirstName } from "../../data/tenants.js";
 import ChatMessage from "./ChatMessage.jsx";
 
 const WELCOME = {
@@ -44,6 +45,7 @@ export default function ChatbotTab() {
     setTyping(false);
 
     const result = askChatbot(q);
+    const tenant = findTenantByFirstName(q);
     setMessages((prev) => [
       ...prev,
       {
@@ -52,6 +54,7 @@ export default function ChatbotTab() {
         content: result.answer,
         source: result.source,
         confidence: result.confidence,
+        tenantId: tenant?.id || null,
       },
     ]);
   }

@@ -1,15 +1,14 @@
-// Pure frontend draft variation system.
-// Takes the base draft string returned by the API and rewrites it in a different style.
-// This makes the Regenerate button produce meaningfully different text each time.
+// Pure frontend draft tone variations. These operate on the draft BODY only —
+// the signature is appended separately by the caller so it stays identical
+// across every regenerate (Standard / Formal / Brief / Friendly).
 
 export const VARIATION_LABELS = ["Standard", "Formal", "Brief", "Friendly"];
 
 function applyFormal(text) {
   return text
     .replace(/^Dear ([^,\n]+),\n\n/m, (_, name) =>
-      `Dear ${name},\n\nI am writing to formally inform you that `
+      `Dear ${name},\n\nI am writing to formally confirm that `
     )
-    .replace(/Best regards,/gi, "Yours sincerely,")
     .replace(/Thanks for/gi, "Thank you for")
     .replace(/please let us know if you have any further questions\./gi,
       "Should you require any further clarification, please do not hesitate to contact our office."
@@ -23,27 +22,10 @@ function applyFormal(text) {
 
 function applyBrief(text) {
   const lines = text.split("\n").map((l) => l.trim()).filter(Boolean);
-  const opener = lines.find((l) => l.startsWith("Dear")) || lines[0];
-  const closing = lines
-    .filter(
-      (l) =>
-        l.startsWith("Best") ||
-        l.startsWith("Yours") ||
-        l.startsWith("Property") ||
-        l === "Property Management Team"
-    )
-    .join("\n");
-  const body = lines.filter(
-    (l) =>
-      !l.startsWith("Dear") &&
-      !l.startsWith("Best") &&
-      !l.startsWith("Yours") &&
-      l !== "Property Management Team" &&
-      l !== "Property Manager"
-  );
-  // Take first meaningful sentence from body
+  const opener = lines.find((l) => l.startsWith("Dear") || l.startsWith("Hi")) || lines[0];
+  const body = lines.filter((l) => l !== opener);
   const mainFact = body[0] || "";
-  return `${opener}\n\n${mainFact}\n\n${closing || "Best regards,\nProperty Management Team"}`;
+  return `${opener}\n\n${mainFact}`;
 }
 
 function applyFriendly(text) {
@@ -51,7 +33,6 @@ function applyFriendly(text) {
     .replace(/^Dear ([^,\n]+),\n\n/m, (_, name) =>
       `Hi ${name},\n\nHope you're doing well! `
     )
-    .replace(/Best regards,/gi, "Warm regards,")
     .replace(/Thank you for reaching out\./gi, "Thanks so much for getting in touch!")
     .replace(/Thank you for your message\./gi, "Thanks for your message — happy to help!")
     .replace(/Thank you for contacting us/gi, "Thanks for reaching out to us")
@@ -63,10 +44,10 @@ function applyFriendly(text) {
     .replace(/we will/gi, "we'll");
 }
 
-export function applyVariation(baseDraft, idx) {
+export function applyVariation(baseBody, idx) {
   const i = ((idx % 4) + 4) % 4;
-  if (i === 0) return baseDraft;
-  if (i === 1) return applyFormal(baseDraft);
-  if (i === 2) return applyBrief(baseDraft);
-  return applyFriendly(baseDraft);
+  if (i === 0) return baseBody;
+  if (i === 1) return applyFormal(baseBody);
+  if (i === 2) return applyBrief(baseBody);
+  return applyFriendly(baseBody);
 }
