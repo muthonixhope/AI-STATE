@@ -1,9 +1,6 @@
-// In dev, Vite proxies /api → localhost:8000.
-// In production, VITE_API_URL points to the deployed backend (e.g. Render).
-const BASE = import.meta.env.VITE_API_URL ?? "";
-
+// Relative /api paths work in both dev (Vite proxy) and prod (Vercel routes).
 async function request(path, options = {}) {
-  const res = await fetch(`${BASE}${path}`, {
+  const res = await fetch(path, {
     headers: { "Content-Type": "application/json" },
     ...options,
   });
