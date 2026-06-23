@@ -77,7 +77,7 @@ export default function TaskCalendar() {
       </div>
 
       <p className="text-sm text-slate-500">
-        Same-day tasks are ordered by priority — P1 safety issues come first, then P2, P3, P4.
+        Drag tasks to reschedule. P1 safety issues are always first within a day. Manually moved tasks are marked "Moved by manager"; AI-generated tasks show "AI scheduled".
       </p>
 
       {view === "daily" && (
