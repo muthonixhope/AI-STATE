@@ -5,7 +5,6 @@ import {
   FolderOpen,
   Mail,
   Plus,
-  Search,
   UploadCloud,
 } from "lucide-react";
 import { useApp } from "../../context/AppContext.jsx";
@@ -67,10 +66,8 @@ export default function Dashboard() {
     openEmail,
     openEmailWithFilter,
     addNotification,
-    runSearch,
   } = useApp();
 
-  const [search, setSearch] = useState("");
   const [modal, setModal] = useState(null);
   const alertedRef = useRef(false);
 
@@ -126,32 +123,33 @@ export default function Dashboard() {
 
   return (
     <div className="space-y-6 p-6">
-      {/* Greeting banner */}
-      <div className="overflow-hidden rounded-3xl border border-brand-100 bg-gradient-to-r from-brand-50 via-sky-50 to-white px-6 py-6">
-        <h2 className="text-2xl font-bold text-slate-900">{greeting()}, Tim 👋</h2>
-        <p className="mt-0.5 text-sm font-medium text-brand-600">{formattedToday()}</p>
-        <p className="mt-1 text-sm text-slate-500">Here's what needs your attention today.</p>
 
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            if (search.trim()) runSearch(search.trim());
-          }}
-          className="mt-4 max-w-xl"
-        >
-          <div className="flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2.5 shadow-sm focus-within:ring-2 focus-within:ring-brand-100">
-            <Search className="h-4 w-4 text-slate-400" />
-            <input
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search emails, files, tasks, tenants…"
-              className="w-full bg-transparent text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none"
-            />
-          </div>
-        </form>
+      {/* ── Greeting banner with property image ─────────────────────── */}
+      <div className="relative overflow-hidden rounded-3xl border border-brand-100 bg-gradient-to-r from-brand-50 via-sky-50 to-slate-100">
+        {/* Building photo — right 44% */}
+        <div className="absolute inset-y-0 right-0 w-[44%]">
+          <img
+            src="/building.jpg"
+            alt="Managed property"
+            className="h-full w-full object-cover object-center"
+            onError={(e) => { e.currentTarget.parentElement.style.display = "none"; }}
+          />
+          {/* gradient left-edge fade so text stays readable */}
+          <div className="absolute inset-0 bg-gradient-to-r from-sky-50 via-sky-50/75 to-transparent" />
+        </div>
+
+        {/* Text */}
+        <div className="relative px-7 py-7">
+          <p className="mb-1 text-[11px] font-bold uppercase tracking-widest text-brand-500">
+            MOMENI · Property Management
+          </p>
+          <h2 className="text-2xl font-bold text-slate-900">{greeting()}, Tim 👋</h2>
+          <p className="mt-0.5 text-sm font-semibold text-brand-600">{formattedToday()}</p>
+          <p className="mt-2 text-sm text-slate-500">Here's what needs your attention today.</p>
+        </div>
       </div>
 
-      {/* Clickable priority summary boxes */}
+      {/* ── Priority summary boxes ───────────────────────────────────── */}
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
         {SUMMARY.map((b) => (
           <SummaryBox
@@ -166,7 +164,7 @@ export default function Dashboard() {
         ))}
       </div>
 
-      {/* Working board: urgent emails + today's tasks */}
+      {/* ── Working board: urgent emails + today's tasks ─────────────── */}
       <div className="grid gap-5 lg:grid-cols-2">
         <SummaryCard title="Urgent & important emails" icon={AlertTriangle} onViewAll={() => setSection("inbox")}>
           {urgentEmails.length === 0 ? (
@@ -200,10 +198,10 @@ export default function Dashboard() {
         </section>
       </div>
 
-      {/* Notes pad */}
+      {/* ── Notes pad ───────────────────────────────────────────────── */}
       <DashboardNotesPad />
 
-      {/* Files */}
+      {/* ── Files ───────────────────────────────────────────────────── */}
       <div className="grid gap-5 lg:grid-cols-2">
         <SummaryCard title="Recently opened files" icon={FolderOpen} onViewAll={() => setSection("files")}>
           {recentlyOpened.length === 0 ? (
